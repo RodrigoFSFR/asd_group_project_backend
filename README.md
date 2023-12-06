@@ -1,2 +1,2 @@
-# asd_group_project_backend
+# ASD Group Project Backend
 Backend for the ASD Group Project
