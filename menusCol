@@ -6,5 +6,7 @@ menusCol = db["Menus"]
 
 # creates a menu
 def createMenu(menuId, items):
-    menu = {"menuId": menuId, "items": items}
+    # creates the menu with 'active' set to false
+    # as the 'active' status depends on the manager's confirmation
+    menu = {"menuId": menuId, "active": "false", "items": items}
     menusCol.insert_one(menu)
