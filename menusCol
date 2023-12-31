@@ -10,3 +10,7 @@ def createMenu(menuId, items):
     # as the 'active' status depends on the manager's confirmation
     menu = {"menuId": menuId, "active": "false", "items": items}
     menusCol.insert_one(menu)
+
+
+def deleteMenu(menuId):
+    menusCol.delete_one({"menuId": menuId})

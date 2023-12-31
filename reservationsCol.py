@@ -8,3 +8,8 @@ reservationsCol = db["Reservations"]
 def createReservation(name, phone, time, table):
     reservation = {"name": name, "phone": phone, "time": time, "table": table}
     reservationsCol.insert_one(reservation)
+
+
+# deletes a reservation
+def deleteReservation(time, table):
+    reservationsCol.delete_one({"time": time, "table": table})

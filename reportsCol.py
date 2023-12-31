@@ -14,3 +14,7 @@ def createReport(staffId, name, role, date, metrics):
         "metrics": metrics,
     }
     reportsCol.insert_one(report)
+
+
+def deleteReport(staffId, date):
+    reportsCol.delete_one({"staffId": staffId, "date": date})
