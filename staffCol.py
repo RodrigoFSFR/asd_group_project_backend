@@ -71,3 +71,23 @@ def login(staffId, password):
 
     print(f"Failed to authenticate staff member with ID:{staffId}")
     return False
+
+
+def changePassword(staffId, password):
+    # custom secret key used for password hasing, stored in .env
+    bcryptKey = os.environ.get("BCRYPTKEY")
+
+    # salts and hashes the password
+    salt = bcrypt.gensalt()
+    hashedPassword = bcrypt.hashpw(
+        password.encode("utf-8"),
+        bcrypt.kdf(bcryptKey.encode("utf-8"), salt, desired_key_bytes=32),
+    )
+
+    update = staffCol.update_one(
+        {"staffId": staffId}, {"$set": {"password": hashedPassword}}
+    )
+    if update.modified_count > 0:
+        print(f"Staff member with ID:{staffId}'s password was changed successfully.")
+    else:
+        print(f"Staff member with ID:{staffId}'s password could not be changed.")
