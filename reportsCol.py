@@ -1,4 +1,4 @@
-from mongo import db
+from common import db
 
 # defines the collection for staff reports
 reportsCol = db["Reports"]

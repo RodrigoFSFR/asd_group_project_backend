@@ -1,12 +1,12 @@
-from mongo import db
-import bcrypt, os
+from common import db, getNextId
+import bcrypt, os  # used for password encryption and environment variable access
 
 # defines the collection for staff members
 staffCol = db["Staff"]
 
 
 # creates a staff member
-def createStaff(staffId, password, role, name, metrics):
+def createStaff(password, role, name, metrics):
     # custom secret key used for password hasing, stored in .env
     bcryptKey = os.environ.get("BCRYPTKEY")
 
@@ -17,6 +17,7 @@ def createStaff(staffId, password, role, name, metrics):
         bcrypt.kdf(bcryptKey.encode("utf-8"), salt, desired_key_bytes=32),
     )
 
+    staffId = getNextId(staffCol)
     staff = {
         "staffId": staffId,
         "password": hashedPassword,

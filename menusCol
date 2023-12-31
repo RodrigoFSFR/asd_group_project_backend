@@ -1,11 +1,12 @@
-from mongo import db
+from common import db, getNextId
 
 # defines the collection for menus
 menusCol = db["Menus"]
 
 
 # creates a menu
-def createMenu(menuId, items):
+def createMenu(items):
+    menuId = getNextId(menusCol)
     # creates the menu with 'active' set to false
     # as the 'active' status depends on the manager's confirmation
     menu = {"menuId": menuId, "active": False, "items": items}

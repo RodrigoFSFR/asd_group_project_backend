@@ -1,11 +1,12 @@
-from mongo import db
+from common import db, getNextId
 
 # defines the collection for inventory items
 inventoryItemsCol = db["InventoryItems"]
 
 
 # creates an inventory item
-def createItem(itemId, name, price, amount):
+def createItem(name, price, amount):
+    itemId = getNextId(inventoryItemsCol)
     item = {"itemId": itemId, "name": name, "price": price, "amount": amount}
     inventoryItemsCol.insert_one(item)
     print(f"Created the following item: {name}")
