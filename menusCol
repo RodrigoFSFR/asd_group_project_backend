@@ -1,0 +1,10 @@
+from mongo import db
+
+# defines the collection for menus
+menusCol = db["Menus"]
+
+
+# creates a menu
+def createMenu(menuId, items):
+    menu = {"menuId": menuId, "items": items}
+    menusCol.insert_one(menu)
