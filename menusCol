@@ -12,5 +12,10 @@ def createMenu(menuId, items):
     menusCol.insert_one(menu)
 
 
+# deletes a menu
 def deleteMenu(menuId):
-    menusCol.delete_one({"menuId": menuId})
+    delete = menusCol.delete_one({"menuId": menuId})
+    if delete.deleted_count > 0:
+        print(f"Menu with ID:{menuId} was deleted successfully")
+    else:
+        print(f"Menu with ID:{menuId} was not found or was already deleted")

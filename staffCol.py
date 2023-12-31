@@ -29,14 +29,26 @@ def createStaff(staffId, password, role, name, metrics):
 
 # deletes a specific staff member
 def deleteStaff(staffId):
-    staffCol.delete_one({"id": staffId})
+    delete = staffCol.delete_one({"staffId": staffId})
+    if delete.deleted_count > 0:
+        print(f"Staff member with ID:{staffId} was deleted successfully")
+    else:
+        print(f"Staff member with ID:{staffId} was not found or was already deleted")
 
 
-# changes a staff member's role and wipes their metrics
+# changes a staff member's role
 def changeStaffRole(staffId, role):
-    staffCol.update_one(
-        {"id": staffId}, {"$set": {"type": role}, "$unset": {"metrics": ""}}
-    )
+    staff = staffCol.find_one({"staffId": staffId})
+    if staff:
+        staff["role"] = role
+        # empties the metrics as the staff member now has a different role
+        staff["metrics"] = {}
+
+        # replaces the staff member's data with the new 'staff' data object
+        staffCol.replace_one({"staffId": staffId}, staff)
+        print(f"Changed staff with ID:{staffId}'s role to: {role}")
+    else:
+        print(f"Staff member with ID:{staffId} was not found")
 
 
 # login function using staff details
@@ -54,6 +66,8 @@ def login(staffId, password):
 
         # compares the passwords using the built-in bcrypt.checkpw method
         if bcrypt.checkpw(hashedPassword, storedPassword):
+            print(f"Authenticated staff member with ID:{staffId}")
             return True
 
+    print(f"Failed to authenticate staff member with ID:{staffId}")
     return False

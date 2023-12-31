@@ -14,7 +14,14 @@ def createReport(staffId, name, role, date, metrics):
         "metrics": metrics,
     }
     reportsCol.insert_one(report)
+    print(f"Generated report for staff member with ID:{staffId}")
 
 
 def deleteReport(staffId, date):
-    reportsCol.delete_one({"staffId": staffId, "date": date})
+    delete = reportsCol.delete_one({"staffId": staffId, "date": date})
+    if delete.deleted_count > 0:
+        print(f"Report with associated staff ID:{staffId} was deleted successfully")
+    else:
+        print(
+            f"Report with associated staff ID:{staffId} was not found or already deleted"
+        )
