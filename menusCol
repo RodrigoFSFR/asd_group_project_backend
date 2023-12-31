@@ -8,7 +8,7 @@ menusCol = db["Menus"]
 def createMenu(menuId, items):
     # creates the menu with 'active' set to false
     # as the 'active' status depends on the manager's confirmation
-    menu = {"menuId": menuId, "active": "false", "items": items}
+    menu = {"menuId": menuId, "active": False, "items": items}
     menusCol.insert_one(menu)
 
 
@@ -19,3 +19,19 @@ def deleteMenu(menuId):
         print(f"Menu with ID:{menuId} was deleted successfully")
     else:
         print(f"Menu with ID:{menuId} was not found or was already deleted")
+
+
+# sets a menu to active
+def activateMenu(menuId):
+    menu = menusCol.find_one({"menuId": menuId})
+
+    if menu:
+        # sets the selected menu to active = "true"
+        menusCol.update_one({"menuId": menuId}, {"$set": {"active": True}})
+
+        # sets all other menus to active = "false"
+        menusCol.update_many({"menuId": {"$ne": menuId}}, {"$set": {"active": False}})
+
+        print(f"Menu with ID:{menuId} is now the active menu")
+    else:
+        print(f"Menu with ID:{menuId} was not found")

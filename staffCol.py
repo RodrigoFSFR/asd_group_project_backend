@@ -88,6 +88,6 @@ def changePassword(staffId, password):
         {"staffId": staffId}, {"$set": {"password": hashedPassword}}
     )
     if update.modified_count > 0:
-        print(f"Staff member with ID:{staffId}'s password was changed successfully.")
+        print(f"Staff member with ID:{staffId}'s password was changed successfully")
     else:
-        print(f"Staff member with ID:{staffId}'s password could not be changed.")
+        print(f"Staff member with ID:{staffId}'s password could not be changed")
