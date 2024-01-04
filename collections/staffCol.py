@@ -30,20 +30,26 @@ def createStaff(password, role, name):
         "name": name,
         "metrics": {},
     }
-    staffCol.insert_one(staff)
 
-    print(f"Staff member created with ID:{staffId}")
-    return True
+    insertResult = staffCol.insert_one(staff)
+    if insertResult.inserted_id:
+        print(f"Staff member created with ID:{staffId}")
+        return True
+    else:
+        print(f"Staff member could not be created")
+        return False
 
 
 @staffBp.route("/delete-staff", methods=["DELETE"])
 # deletes a specific staff member
 def deleteStaff(staffId):
-    delete = staffCol.delete_one({"staffId": staffId})
-    if delete.deleted_count > 0:
+    deleteResult = staffCol.delete_one({"staffId": staffId})
+    if deleteResult.deleted_count > 0:
         print(f"Staff member with ID:{staffId} was deleted successfully")
+        return True
     else:
         print(f"Staff member with ID:{staffId} was not found or was already deleted")
+        return False
 
 
 @staffBp.route("/change-role", methods=["POST"])
@@ -56,10 +62,16 @@ def changeStaffRole(staffId, role):
         staff["metrics"] = {}
 
         # replaces the staff member's data with the new 'staff' data object
-        staffCol.replace_one({"staffId": staffId}, staff)
-        print(f"Changed staff with ID:{staffId}'s role to: {role}")
+        replaceResult = staffCol.replace_one({"staffId": staffId}, staff)
+        if replaceResult.modified_count > 0:
+            print(f"Changed staff with ID:{staffId}'s role to: {role}")
+            return True
+        else:
+            print(f"Could not change staff with ID:{staffId}'s role to: {role}")
+            return False
     else:
         print(f"Staff member with ID:{staffId} was not found")
+        return False
 
 
 @staffBp.route("/login", methods=["POST"])
@@ -107,10 +119,10 @@ def changePassword(managerId, staffId, password):
         bcrypt.kdf(bcryptKey.encode("utf-8"), salt, desired_key_bytes=32),
     )
 
-    update = staffCol.update_one(
+    updateResult = staffCol.update_one(
         {"staffId": staffId}, {"$set": {"password": hashedPassword}}
     )
-    if update.modified_count > 0:
+    if updateResult.modified_count > 0:
         print(f"Staff member with ID:{staffId}'s password was changed successfully")
         return True
     else:

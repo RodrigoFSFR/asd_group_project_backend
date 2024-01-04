@@ -12,16 +12,20 @@ reservationsBp = Blueprint("reservations", __name__)
 # books a reservation
 def createReservation(name, phone, time, table):
     reservation = {"name": name, "phone": phone, "time": time, "table": table}
-    reservationsCol.insert_one(reservation)
-    print(f"Created a reservation for table {table} at {time}")
-    return True
+    insertResult = reservationsCol.insert_one(reservation)
+    if insertResult.inserted_id:
+        print(f"Created a reservation for table {table} at {time}")
+        return True
+    else:
+        print(f"Could not create a reservation for table {table} at {time}")
+        return False
 
 
 @reservationsBp.route("/delete-reservation", methods=["DELETE"])
 # deletes a reservation
 def deleteReservation(time, table):
-    delete = reservationsCol.delete_one({"time": time, "table": table})
-    if delete.deleted_count > 0:
+    deleteResult = reservationsCol.delete_one({"time": time, "table": table})
+    if deleteResult.deleted_count > 0:
         print(f"Reservation for table {table} at {time} was deleted successfully")
         return True
     else:

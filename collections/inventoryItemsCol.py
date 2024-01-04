@@ -13,9 +13,14 @@ inventoryItemsBp = Blueprint("inventoryItems", __name__)
 def createItem(name, price, amount):
     itemId = getNextId(inventoryItemsCol)
     item = {"itemId": itemId, "name": name, "price": price, "amount": amount}
-    inventoryItemsCol.insert_one(item)
-    print(f"Created the following item: {name}")
-    return True
+
+    insertResult = inventoryItemsCol.insert_one(item)
+    if insertResult.inserted_id:
+        print(f"Created the following item: {name}")
+        return True
+    else:
+        print(f"Could not create item")
+        return False
 
 
 @inventoryItemsBp.route("/delete-item", methods=["DELETE"])
@@ -39,11 +44,17 @@ def changeItemAmount(itemId, amount):
         currentAmount = item.get("amount")
         newAmount = currentAmount + amount
 
-        inventoryItemsCol.update_one(
+        updateResult = inventoryItemsCol.update_one(
             {"itemId": itemId}, {"$set": {"amount": newAmount}}
         )
-        print(f"Item with ID:{itemId} was successfully changed")
-        return True
+        if updateResult.modified_count > 0:
+            print(
+                f"Item with ID:{itemId}'s amount was successfully changed to {newAmount}"
+            )
+            return True
+        else:
+            print(f"Item with ID:{itemId} could not be changed to {newAmount}")
+            return True
     else:
         print(f"Item with ID:{itemId} was not found")
         return False
