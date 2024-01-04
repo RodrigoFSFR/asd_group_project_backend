@@ -83,7 +83,7 @@ def getAllMenus():
         return False, 500
 
 
-@menusBp.route("get-menu", methods=["GET"])
+@menusBp.route("/get-menu", methods=["GET"])
 def getMenu(menuId):
     menu = menusCol.find_one({"menuId": menuId}, {"_id": 0})
     if menu:

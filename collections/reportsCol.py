@@ -42,7 +42,7 @@ def deleteReport(staffId, date):
         return False, 500
 
 
-@reportsBp.route("/get-all-reports")
+@reportsBp.route("/get-all-reports", methods=["GET"])
 # fetches all reports
 def getAllReports():
     reportsList = list(reportsCol.find({}, {"_id": 0}))
@@ -53,7 +53,7 @@ def getAllReports():
         return False, 500
 
 
-@reportsBp.route("/get-staff-reports")
+@reportsBp.route("/get-staff-reports", methods=["GET"])
 # fetches reports for a specifc staff member
 def getReport(staffId):
     reportsList = list(reportsCol.find({"staffId": staffId}, {"_id": 0}))
