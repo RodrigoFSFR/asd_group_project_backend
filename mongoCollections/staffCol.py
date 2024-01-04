@@ -11,7 +11,7 @@ staffBp = Blueprint("staff", __name__)
 
 @staffBp.route("/add-staff", methods=[""])
 # creates a staff member
-def createStaff(password, role, name):
+def createStaff(password, role, name, shift):
     # custom secret key used for password hasing, stored in .env
     bcryptKey = os.environ.get("BCRYPTKEY")
 
@@ -28,6 +28,7 @@ def createStaff(password, role, name):
         "password": hashedPassword,
         "role": role,
         "name": name,
+        "shift": shift,
         "metrics": {},
     }
 
@@ -136,7 +137,7 @@ def getAllStaff():
     staffList = list(
         staffCol.find(
             {},
-            {"_id": 0, "password": 0, "metrics": 0, "staffId": 1, "role": 1, "name": 1},
+            {"_id": 0, "password": 0, "metrics": 0, "staffId": 1, "role": 1, "name": 1, "shift": 1},
         )
     )
     if staffList:
