@@ -19,6 +19,11 @@ def createItem():
     itemId = getNextId(inventoryItemsCol)
     item = {"itemId": itemId, "name": name, "price": price, "amount": amount}
 
+    duplicate = inventoryItemsCol.find_one({"name": name})
+    if duplicate:
+        print(f"An item with the name: {name} already exists")
+        return "False", 500
+
     insertResult = inventoryItemsCol.insert_one(item)
     if insertResult.inserted_id:
         print(f"Created the following item: {name}")
@@ -51,6 +56,11 @@ def changeItemAmount():
     name = data.get("name")
     price = data.get("price")
     amount = data.get("amount")
+
+    duplicate = inventoryItemsCol.find_one({"name": name})
+    if duplicate:
+        print(f"An item with the name: {name} already exists")
+        return "False", 500
 
     item = inventoryItemsCol.find_one({"itemId": itemId})
     if item:
