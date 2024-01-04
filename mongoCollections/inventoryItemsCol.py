@@ -48,6 +48,8 @@ def deleteItem():
 def changeItemAmount():
     data = request.json
     itemId = data.get("itemId")
+    name = data.get("name")
+    price = data.get("price")
     amount = data.get("amount")
 
     item = inventoryItemsCol.find_one({"itemId": itemId})
@@ -57,15 +59,14 @@ def changeItemAmount():
         newAmount = currentAmount + amount
 
         updateResult = inventoryItemsCol.update_one(
-            {"itemId": itemId}, {"$set": {"amount": newAmount}}
+            {"itemId": itemId},
+            {"$set": {"amount": newAmount, "name": name, "price": price}},
         )
         if updateResult.modified_count > 0:
-            print(
-                f"Item with ID:{itemId}'s amount was successfully changed to {newAmount}"
-            )
+            print(f"Item with ID:{itemId} was successfully changed")
             return "True", 200
         else:
-            print(f"Item with ID:{itemId} could not be changed to {newAmount}")
+            print(f"Item with ID:{itemId} could not be changed")
             return "False", 500
     else:
         print(f"Item with ID:{itemId} was not found")

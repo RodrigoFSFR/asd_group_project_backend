@@ -1,6 +1,6 @@
 from .common import db
 from flask import Blueprint, request, jsonify
-from staffCol import staffCol
+from .staffCol import staffCol
 
 # defines the collection for staff reports
 reportsCol = db["Reports"]

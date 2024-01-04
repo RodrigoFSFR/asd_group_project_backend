@@ -14,6 +14,9 @@ def createReservation():
     data = request.json
     name = data.get("name")
     phone = data.get("phone")
+    year = data.get("year")
+    month = data.get("month")
+    day = data.get("day")
     time = data.get("time")
     table = data.get("table")
 
@@ -22,16 +25,21 @@ def createReservation():
         "reservationId": reservationId,
         "name": name,
         "phone": phone,
+        "year": year,
+        "month": month,
+        "day": day,
         "time": time,
         "table": table,
     }
 
     insertResult = reservationsCol.insert_one(reservation)
     if insertResult.inserted_id:
-        print(f"Created a reservation for table {table} at {time}")
+        print(
+            f"Created a reservation for table {table} at {time} on {day}/{month}/{year}"
+        )
         return "True", 200
     else:
-        print(f"Could not create a reservation for table {table} at {time}")
+        print(f"Could not create reservation")
         return "False", 500
 
 
@@ -55,21 +63,31 @@ def deleteReservation():
 def changeReservation():
     data = request.json
     reservationId = data.get("reservationId")
+    year = data.get("year")
+    month = data.get("month")
+    day = data.get("day")
     time = data.get("time")
     table = data.get("table")
 
     updateResult = reservationsCol.find_one_and_update(
-        {"reservationId": reservationId}, {"$set": {"time": time, "table": table}}
+        {"reservationId": reservationId},
+        {
+            "$set": {
+                "year": year,
+                "month": month,
+                "day": day,
+                "time": time,
+                "table": table,
+            }
+        },
     )
     if updateResult.modified_count > 0:
         print(
-            f"Reservation with ID: {reservationId} changed to table {table} at {time}"
+            f"Reservation with ID: {reservationId} changed to table {table} at {time} on {day}/{month}/{year}"
         )
         return "True", 200
     else:
-        print(
-            f"Failed to change reservation with ID: {reservationId} to table {table} at {time}"
-        )
+        print(f"Failed to change reservation with ID: {reservationId}")
         return "False", 500
 
 
