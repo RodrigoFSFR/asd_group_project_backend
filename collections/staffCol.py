@@ -9,6 +9,7 @@ staffCol = db["Staff"]
 staffBp = Blueprint("staff", __name__)
 
 
+@staffBp.route("/add-staff", methods=[""])
 # creates a staff member
 def createStaff(password, role, name, metrics):
     # custom secret key used for password hasing, stored in .env
@@ -32,6 +33,7 @@ def createStaff(password, role, name, metrics):
     staffCol.insert_one(staff)
 
 
+@staffBp.route("/delete-staff", methods=["DELETE"])
 # deletes a specific staff member
 def deleteStaff(staffId):
     delete = staffCol.delete_one({"staffId": staffId})
@@ -41,6 +43,7 @@ def deleteStaff(staffId):
         print(f"Staff member with ID:{staffId} was not found or was already deleted")
 
 
+@staffBp.route("/change-role", methods=["POST"])
 # changes a staff member's role
 def changeStaffRole(staffId, role):
     staff = staffCol.find_one({"staffId": staffId})
@@ -56,6 +59,7 @@ def changeStaffRole(staffId, role):
         print(f"Staff member with ID:{staffId} was not found")
 
 
+@staffBp.route("/login", methods=["POST"])
 # login function using staff details
 def login(staffId, password):
     staff = staffCol.find_one({"staffId": staffId})
@@ -78,6 +82,7 @@ def login(staffId, password):
     return False
 
 
+@staffBp.route("/change-password", methods=["POST"])
 # changes a staff member's password
 # only works if a manager's ID is inserted
 # alongside the staff member or manager's own ID

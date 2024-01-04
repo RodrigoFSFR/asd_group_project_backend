@@ -8,6 +8,7 @@ menusCol = db["Menus"]
 menusBp = Blueprint("menus", __name__)
 
 
+@menusBp.route("/add-menu", methods=["POST"])
 # creates a menu
 def createMenu(items):
     menuId = getNextId(menusCol)
@@ -15,17 +16,23 @@ def createMenu(items):
     # as the 'active' status depends on the manager's confirmation
     menu = {"menuId": menuId, "active": False, "items": items}
     menusCol.insert_one(menu)
+    print(f"Created menu with ID:{menuId}")
+    return True
 
 
+@menusBp.route("/delete-menu", methods=["DELETE"])
 # deletes a menu
 def deleteMenu(menuId):
     delete = menusCol.delete_one({"menuId": menuId})
     if delete.deleted_count > 0:
         print(f"Menu with ID:{menuId} was deleted successfully")
+        return True
     else:
         print(f"Menu with ID:{menuId} was not found or was already deleted")
+        return False
 
 
+@menusBp.route("/activate-menu", methods=["POST"])
 # sets a menu to active
 def activateMenu(menuId):
     menu = menusCol.find_one({"menuId": menuId})
@@ -38,5 +45,7 @@ def activateMenu(menuId):
         menusCol.update_many({"menuId": {"$ne": menuId}}, {"$set": {"active": False}})
 
         print(f"Menu with ID:{menuId} is now the active menu")
+        return True
     else:
         print(f"Menu with ID:{menuId} was not found")
+        return False
