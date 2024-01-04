@@ -6,7 +6,7 @@ from flask import Flask
 
 # imports all collections in the collections folder
 # so that their routes can be used by the server
-from collections import (
+from mongoCollections import (
     inventoryItemsCol,
     menusCol,
     reportsCol,
