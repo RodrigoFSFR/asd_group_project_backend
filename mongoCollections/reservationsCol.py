@@ -19,6 +19,10 @@ def createReservation():
     time = data.get("time")
     table = data.get("table")
 
+    duplicate = reservationsCol.find_one({"date": date, "time": time, "table": table})
+    if duplicate:
+        return False, 500
+
     reservationId = getNextId(reservationsCol)
     reservation = {
         "reservationId": reservationId,
@@ -63,6 +67,10 @@ def changeReservation():
     people = data.get("people")
     time = data.get("time")
     table = data.get("table")
+
+    duplicate = reservationsCol.find_one({"date": date, "time": time, "table": table})
+    if duplicate:
+        return False, 500
 
     updateResult = reservationsCol.find_one_and_update(
         {"reservationId": reservationId},
