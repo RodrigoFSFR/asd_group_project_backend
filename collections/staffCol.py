@@ -11,7 +11,7 @@ staffBp = Blueprint("staff", __name__)
 
 @staffBp.route("/add-staff", methods=[""])
 # creates a staff member
-def createStaff(password, role, name, metrics):
+def createStaff(password, role, name):
     # custom secret key used for password hasing, stored in .env
     bcryptKey = os.environ.get("BCRYPTKEY")
 
@@ -28,9 +28,12 @@ def createStaff(password, role, name, metrics):
         "password": hashedPassword,
         "role": role,
         "name": name,
-        "metrics": metrics,
+        "metrics": {},
     }
     staffCol.insert_one(staff)
+
+    print(f"Staff member created with ID:{staffId}")
+    return True
 
 
 @staffBp.route("/delete-staff", methods=["DELETE"])
