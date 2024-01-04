@@ -21,7 +21,8 @@ def createReservation():
 
     duplicate = reservationsCol.find_one({"date": date, "time": time, "table": table})
     if duplicate:
-        return False, 500
+        print(f"A reservation already exists at {time} on {date} for table {table}")
+        return "False", 500
 
     reservationId = getNextId(reservationsCol)
     reservation = {
@@ -70,7 +71,8 @@ def changeReservation():
 
     duplicate = reservationsCol.find_one({"date": date, "time": time, "table": table})
     if duplicate:
-        return False, 500
+        print(f"A reservation already exists at {time} on {date} for table {table}")
+        return "False", 500
 
     updateResult = reservationsCol.find_one_and_update(
         {"reservationId": reservationId},
