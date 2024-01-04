@@ -53,7 +53,7 @@ def changeItemAmount():
     item = inventoryItemsCol.find_one({"itemId": itemId})
     if item:
         # adds/subtracts to the current amount of an item
-        currentAmount = item.get("amount")
+        currentAmount = int(item.get("amount"))
         newAmount = currentAmount + amount
 
         updateResult = inventoryItemsCol.update_one(
