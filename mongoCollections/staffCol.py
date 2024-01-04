@@ -8,6 +8,11 @@ staffCol = db["Staff"]
 # creates a blueprint to store the routes
 staffBp = Blueprint("staff", __name__)
 
+# custom secret key used for password hasing, stored in .env
+bcryptKey = os.environ.get(
+    "bcryptKey", "default"
+)  # the key becomes "default" if it is not set in .env
+
 
 @staffBp.route("/add-staff", methods=[""])
 # creates a staff member
@@ -17,9 +22,6 @@ def createStaff():
     password = data.get("password")
     role = data.get("role")
     shift = data.get("shift")
-
-    # custom secret key used for password hasing, stored in .env
-    bcryptKey = os.environ.get("BCRYPTKEY")
 
     # salts and hashes the password
     salt = bcrypt.gensalt()
@@ -98,7 +100,6 @@ def login():
     staff = staffCol.find_one({"staffId": staffId})
     if staff:
         storedPassword = staff["password"]
-        bcryptKey = os.environ.get("BCRYPTKEY")
 
         # hashes the input password with the same method as the one stored in the database
         hashedPassword = bcrypt.hashpw(
@@ -131,9 +132,6 @@ def changePassword():
             f"Incorrect manager ID: {managerId}, staff member with ID:{staffId}'s password could not be changed"
         )
         return "False", 500
-
-    # custom secret key used for password hasing, stored in .env
-    bcryptKey = os.environ.get("BCRYPTKEY")
 
     # salts and hashes the password
     salt = bcrypt.gensalt()
