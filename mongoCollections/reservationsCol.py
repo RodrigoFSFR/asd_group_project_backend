@@ -14,9 +14,8 @@ def createReservation():
     data = request.json
     name = data.get("name")
     phone = data.get("phone")
-    year = data.get("year")
-    month = data.get("month")
-    day = data.get("day")
+    people = data.get("people")
+    date = data.get("date")
     time = data.get("time")
     table = data.get("table")
 
@@ -25,18 +24,15 @@ def createReservation():
         "reservationId": reservationId,
         "name": name,
         "phone": phone,
-        "year": year,
-        "month": month,
-        "day": day,
+        "people": people,
+        "date": date,
         "time": time,
         "table": table,
     }
 
     insertResult = reservationsCol.insert_one(reservation)
     if insertResult.inserted_id:
-        print(
-            f"Created a reservation for table {table} at {time} on {day}/{month}/{year}"
-        )
+        print(f"Created a reservation for table {table} at {time} on {date}")
         return "True", 200
     else:
         print(f"Could not create reservation")
@@ -63,9 +59,8 @@ def deleteReservation():
 def changeReservation():
     data = request.json
     reservationId = data.get("reservationId")
-    year = data.get("year")
-    month = data.get("month")
-    day = data.get("day")
+    date = data.get("date")
+    people = data.get("people")
     time = data.get("time")
     table = data.get("table")
 
@@ -73,9 +68,8 @@ def changeReservation():
         {"reservationId": reservationId},
         {
             "$set": {
-                "year": year,
-                "month": month,
-                "day": day,
+                "date": date,
+                "people": people,
                 "time": time,
                 "table": table,
             }
@@ -83,7 +77,7 @@ def changeReservation():
     )
     if updateResult.modified_count > 0:
         print(
-            f"Reservation with ID: {reservationId} changed to table {table} at {time} on {day}/{month}/{year}"
+            f"Reservation with ID: {reservationId} changed to table {table} at {time} on {date}"
         )
         return "True", 200
     else:
