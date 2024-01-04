@@ -34,10 +34,10 @@ def createStaff(password, role, name):
     insertResult = staffCol.insert_one(staff)
     if insertResult.inserted_id:
         print(f"Staff member created with ID:{staffId}")
-        return True
+        return True, 200
     else:
         print(f"Staff member could not be created")
-        return False
+        return False, 500
 
 
 @staffBp.route("/delete-staff", methods=["DELETE"])
@@ -46,10 +46,10 @@ def deleteStaff(staffId):
     deleteResult = staffCol.delete_one({"staffId": staffId})
     if deleteResult.deleted_count > 0:
         print(f"Staff member with ID:{staffId} was deleted successfully")
-        return True
+        return True, 200
     else:
         print(f"Staff member with ID:{staffId} was not found or was already deleted")
-        return False
+        return False, 500
 
 
 @staffBp.route("/change-role", methods=["POST"])
@@ -65,13 +65,13 @@ def changeStaffRole(staffId, role):
         replaceResult = staffCol.replace_one({"staffId": staffId}, staff)
         if replaceResult.modified_count > 0:
             print(f"Changed staff with ID:{staffId}'s role to: {role}")
-            return True
+            return True, 200
         else:
             print(f"Could not change staff with ID:{staffId}'s role to: {role}")
-            return False
+            return False, 500
     else:
         print(f"Staff member with ID:{staffId} was not found")
-        return False
+        return False, 500
 
 
 @staffBp.route("/login", methods=["POST"])
@@ -91,10 +91,10 @@ def login(staffId, password):
         # compares the passwords using the built-in bcrypt.checkpw method
         if bcrypt.checkpw(hashedPassword, storedPassword):
             print(f"Authenticated staff member with ID:{staffId}")
-            return True
+            return True, 200
 
     print(f"Failed to authenticate staff member with ID:{staffId}")
-    return False
+    return False, 500
 
 
 @staffBp.route("/change-password", methods=["POST"])
@@ -107,7 +107,7 @@ def changePassword(managerId, staffId, password):
         print(
             f"Incorrect manager ID: {managerId}, staff member with ID:{staffId}'s password could not be changed"
         )
-        return False
+        return False, 500
 
     # custom secret key used for password hasing, stored in .env
     bcryptKey = os.environ.get("BCRYPTKEY")
@@ -124,7 +124,34 @@ def changePassword(managerId, staffId, password):
     )
     if updateResult.modified_count > 0:
         print(f"Staff member with ID:{staffId}'s password was changed successfully")
-        return True
+        return True, 200
     else:
         print(f"Staff member with ID:{staffId}'s password could not be changed")
-        return False
+        return False, 500
+
+
+@staffBp.route("/get-all-staff", methods=["GET"])
+# fetches all staff members' names, IDs and roles
+def getAllStaff():
+    staffList = list(
+        staffCol.find(
+            {},
+            {"_id": 0, "password": 0, "metrics": 0, "staffId": 1, "role": 1, "name": 1},
+        )
+    )
+    if staffList:
+        return jsonify(staffList), 200
+    else:
+        print("Could not retreive staff list")
+        return False, 500
+
+
+@staffBp.route("/get-staff", methods=["GET"])
+# fetches a specific staff member's information
+def getStaff(staffId):
+    staff = staffCol.find_one({"staffId": staffId})
+    if staff:
+        return jsonify(staff), 200
+    else:
+        print(f"Unable to find staff member with ID:{staffId}")
+        return False, 500
