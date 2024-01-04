@@ -64,7 +64,7 @@ def activateMenu(menuId):
 @menusBp.route("/get-active-menu", methods=["GET"])
 # fetches the active menu
 def getActiveMenu():
-    menu = menusCol.find_one({"active": True})
+    menu = menusCol.find_one({"active": True}, {"_id": 0})
     if menu:
         return jsonify(menu), 200
     else:

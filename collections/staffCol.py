@@ -149,7 +149,7 @@ def getAllStaff():
 @staffBp.route("/get-staff", methods=["GET"])
 # fetches a specific staff member's information
 def getStaff(staffId):
-    staff = staffCol.find_one({"staffId": staffId})
+    staff = staffCol.find_one({"staffId": staffId}, {"_id": 0})
     if staff:
         return jsonify(staff), 200
     else:

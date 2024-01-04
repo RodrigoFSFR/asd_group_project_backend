@@ -77,7 +77,7 @@ def getAllReservations():
 @reservationsBp.route("/get-reservation", methods=["GET"])
 # fetches a specific reservation
 def getReservation(reservationId):
-    reservation = reservationsCol.find_one({"reservationId": reservationId})
+    reservation = reservationsCol.find_one({"reservationId": reservationId}, {"_id": 0})
     if reservation:
         return jsonify(reservation), 200
     else:
