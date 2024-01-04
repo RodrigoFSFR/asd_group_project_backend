@@ -19,10 +19,10 @@ def createMenu(items):
     insertResult = menusCol.insert_one(menu)
     if insertResult.inserted_id:
         print(f"Created menu with ID:{menuId}")
-        return True
+        return True, 200
     else:
         print(f"Failed to create menu")
-        return False
+        return False, 500
 
 
 @menusBp.route("/delete-menu", methods=["DELETE"])
@@ -31,10 +31,10 @@ def deleteMenu(menuId):
     deleteResult = menusCol.delete_one({"menuId": menuId})
     if deleteResult.deleted_count > 0:
         print(f"Menu with ID:{menuId} was deleted successfully")
-        return True
+        return True, 200
     else:
         print(f"Menu with ID:{menuId} was not found or was already deleted")
-        return False
+        return False, 500
 
 
 @menusBp.route("/activate-menu", methods=["POST"])
@@ -52,10 +52,42 @@ def activateMenu(menuId):
 
         if activationResult.modified_count > 0:
             print(f"Menu with ID:{menuId} is now the active menu")
-            return True
+            return True, 200
         else:
             print(f"Could not activate menu with ID:{menuId}")
-            return False
+            return False, 500
     else:
         print(f"Menu with ID:{menuId} was not found")
-        return False
+        return False, 500
+
+
+@menusBp.route("/get-active-menu", methods=["GET"])
+# fetches the active menu
+def getActiveMenu():
+    menu = menusCol.find_one({"active": True})
+    if menu:
+        return jsonify(menu), 200
+    else:
+        print("Could not retrieve the active menu")
+        return False, 500
+
+
+@menusBp.route("/get-all-menus", methods=["GET"])
+# fetches all menus
+def getAllMenus():
+    menusList = list(menusCol.find({}, {"_id": 0}))
+    if menusList:
+        return jsonify(menusList), 200
+    else:
+        print("Could not retrieve the list of menus")
+        return False, 500
+
+
+@menusBp.route("get-menu", methods=["GET"])
+def getMenu(menuId):
+    menu = menusCol.find_one({"menuId": menuId}, {"_id": 0})
+    if menu:
+        return jsonify(menu), 200
+    else:
+        print(f"Could not find menu with ID: {menuId}")
+        return False, 500
