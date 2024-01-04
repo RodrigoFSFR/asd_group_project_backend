@@ -1,4 +1,4 @@
-# common functions file
+# common vars file
 
 import pymongo
 
