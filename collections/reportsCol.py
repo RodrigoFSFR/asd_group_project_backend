@@ -1,7 +1,11 @@
-from common import db
+from .common import db
+from flask import Blueprint, jsonify
 
 # defines the collection for staff reports
 reportsCol = db["Reports"]
+
+# creates a blueprint to store the routes
+reportsBp = Blueprint("reports", __name__)
 
 
 # creates a staff report
@@ -17,6 +21,7 @@ def createReport(staffId, name, role, date, metrics):
     print(f"Generated report for staff member with ID:{staffId}")
 
 
+# deletes a staff report
 def deleteReport(staffId, date):
     delete = reportsCol.delete_one({"staffId": staffId, "date": date})
     if delete.deleted_count > 0:

@@ -1,7 +1,11 @@
-from common import db, getNextId
+from .common import db, getNextId
+from flask import Blueprint, jsonify
 
 # defines the collection for inventory items
 inventoryItemsCol = db["InventoryItems"]
+
+# creates a blueprint to store the routes
+inventoryItemsBp = Blueprint("inventoryItems", __name__)
 
 
 # creates an inventory item

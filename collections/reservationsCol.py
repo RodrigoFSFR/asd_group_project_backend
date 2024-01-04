@@ -1,7 +1,11 @@
-from common import db
+from .common import db
+from flask import Blueprint, jsonify
 
 # defines the collection for reservations
 reservationsCol = db["Reservations"]
+
+# creates a blueprint to store the routes
+reservationsBp = Blueprint("reservations", __name__)
 
 
 # books a reservation

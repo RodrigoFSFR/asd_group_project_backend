@@ -1,7 +1,11 @@
-from common import db, getNextId
+from .common import db, getNextId
+from flask import Blueprint, jsonify
 
 # defines the collection for menus
 menusCol = db["Menus"]
+
+# creates a blueprint to store the routes
+menusBp = Blueprint("menus", __name__)
 
 
 # creates a menu

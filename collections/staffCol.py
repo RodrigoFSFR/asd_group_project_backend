@@ -1,8 +1,12 @@
-from common import db, getNextId
-import bcrypt, os  # used for password encryption and environment variable access
+from .common import db, getNextId
+from flask import Blueprint, jsonify
+import bcrypt, os  # bcrypt is used for password encryption and verification
 
 # defines the collection for staff members
 staffCol = db["Staff"]
+
+# creates a blueprint to store the routes
+staffBp = Blueprint("staff", __name__)
 
 
 # creates a staff member
@@ -74,7 +78,17 @@ def login(staffId, password):
     return False
 
 
-def changePassword(staffId, password):
+# changes a staff member's password
+# only works if a manager's ID is inserted
+# alongside the staff member or manager's own ID
+def changePassword(managerId, staffId, password):
+    staff = staffCol.find_one({"staffId": managerId})
+    if staff["type"] != "Manager":
+        print(
+            f"Incorrect manager ID: {managerId}, staff member with ID:{staffId}'s password could not be changed"
+        )
+        return False
+
     # custom secret key used for password hasing, stored in .env
     bcryptKey = os.environ.get("BCRYPTKEY")
 
@@ -90,5 +104,7 @@ def changePassword(staffId, password):
     )
     if update.modified_count > 0:
         print(f"Staff member with ID:{staffId}'s password was changed successfully")
+        return True
     else:
         print(f"Staff member with ID:{staffId}'s password could not be changed")
+        return False
