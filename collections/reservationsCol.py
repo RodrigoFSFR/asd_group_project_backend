@@ -23,10 +23,10 @@ def createReservation(name, phone, time, table):
     insertResult = reservationsCol.insert_one(reservation)
     if insertResult.inserted_id:
         print(f"Created a reservation for table {table} at {time}")
-        return True
+        return True, 200
     else:
         print(f"Could not create a reservation for table {table} at {time}")
-        return False
+        return False, 500
 
 
 @reservationsBp.route("/delete-reservation", methods=["DELETE"])
@@ -35,10 +35,10 @@ def deleteReservation(reservationId):
     deleteResult = reservationsCol.delete_one({"reservationId": reservationId})
     if deleteResult.deleted_count > 0:
         print(f"Reservation with ID: {reservationId} was deleted successfully")
-        return True
+        return True, 200
     else:
         print(f"Reservation with ID: {reservationId} was not found or already deleted")
-        return False
+        return False, 500
 
 
 @reservationsBp.route("/change-reservation", methods=["POST"])
