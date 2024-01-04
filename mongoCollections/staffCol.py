@@ -37,7 +37,7 @@ def createStaff():
         "role": role,
         "name": name,
         "shift": shift,
-        "metrics": {},
+        "metrics": 0,
     }
 
     insertResult = staffCol.insert_one(staff)
