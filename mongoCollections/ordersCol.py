@@ -70,6 +70,24 @@ def completeOrder():
     return "False", 500
 
 
+@ordersBp.route("/change-order")
+# changes an order
+def changeOrder():
+    data = request.json
+    orderId = data.get("orderId")
+    items = data.get("items")
+
+    updateResut = ordersCol.find_one_and_update(
+        {"orderId": orderId}, {"$set": {"items": items}}
+    )
+    if updateResut.modified_count > 0:
+        print(f"Order with ID:{orderId} was changed successfully")
+        return "True", 200
+    else:
+        print(f"Could not change order with ID:{orderId}")
+        return "False", 500
+
+
 @ordersBp.route("/get-all-orders", methods=["GET"])
 # fetches the list of orders
 def getAllOrders():
