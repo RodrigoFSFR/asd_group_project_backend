@@ -14,7 +14,7 @@ bcryptKey = os.environ.get(
 )  # the key becomes "default" if it is not set in .env
 
 
-@staffBp.route("/add-staff", methods=[""])
+@staffBp.route("/add-staff", methods=["POST"])
 # creates a staff member
 def createStaff():
     data = request.json
