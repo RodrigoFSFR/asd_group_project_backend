@@ -155,10 +155,6 @@ def getAllStaff():
                 "_id": 0,
                 "password": 0,
                 "metrics": 0,
-                "staffId": 1,
-                "role": 1,
-                "name": 1,
-                "shift": 1,
             },
         )
     )
