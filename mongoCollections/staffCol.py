@@ -19,16 +19,13 @@ bcryptKey = os.environ.get(
 def createStaff():
     data = request.json
     name = data.get("name")
-    password = data.get("password")
+    password = str(data.get("password"))
     role = data.get("role")
     shift = data.get("shift")
 
     # salts and hashes the password
     salt = bcrypt.gensalt()
-    hashedPassword = bcrypt.hashpw(
-        password.encode("utf-8"),
-        bcrypt.kdf(bcryptKey.encode("utf-8"), salt, desired_key_bytes=32),
-    )
+    hashedPassword = bcrypt.hashpw(password.encode("utf-8"), salt)
 
     staffId = getNextId(staffCol)
     staff = {
@@ -102,10 +99,7 @@ def login():
         storedPassword = staff["password"]
 
         # hashes the input password with the same method as the one stored in the database
-        hashedPassword = bcrypt.hashpw(
-            password.encode("utf-8"),
-            bcrypt.kdf(bcryptKey.encode("utf-8"), storedPassword),
-        )
+        hashedPassword = bcrypt.hashpw(password.encode("utf-8"), storedPassword)
 
         # compares the passwords using the built-in bcrypt.checkpw method
         if bcrypt.checkpw(hashedPassword, storedPassword):
@@ -137,7 +131,7 @@ def changePassword():
     salt = bcrypt.gensalt()
     hashedPassword = bcrypt.hashpw(
         password.encode("utf-8"),
-        bcrypt.kdf(bcryptKey.encode("utf-8"), salt, desired_key_bytes=32),
+        bcrypt.kdf(bcryptKey.encode("utf-8"), salt, desired_key_bytes=32, rounds=10),
     )
 
     updateResult = staffCol.update_one(
