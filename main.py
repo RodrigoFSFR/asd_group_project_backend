@@ -12,6 +12,8 @@ from mongoCollections import (
     reportsCol,
     reservationsCol,
     staffCol,
+    ordersCol,
+    menuItemsCol
 )
 
 server = Flask(__name__)
@@ -23,6 +25,8 @@ server.register_blueprint(menusCol.menusBp)
 server.register_blueprint(reportsCol.reportsBp)
 server.register_blueprint(reservationsCol.reservationsBp)
 server.register_blueprint(staffCol.staffBp)
+server.register_blueprint(ordersCol.ordersBp)
+server.register_blueprint(menuItemsCol.menuItemsBp)
 
 # host and post set in the .env file
 # sets defaults in case they're not defined in the .env file
