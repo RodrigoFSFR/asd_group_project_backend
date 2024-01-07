@@ -29,7 +29,7 @@ def createOrder():
 
 @ordersBp.route("/delete-order", methods=["DELETE"])
 # deletes an order
-def completeOrder():
+def deleteOrder():
     data = request.json
     orderId = data.get("orderId")
 
