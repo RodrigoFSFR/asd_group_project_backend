@@ -6,7 +6,7 @@ from .staffCol import staffCol
 ordersCol = db["Orders"]
 
 # creates a blueprint to store the routes
-ordersBp = Blueprint("menus", __name__)
+ordersBp = Blueprint("orders", __name__)
 
 
 @ordersBp.route("/add-order", methods=["POST"])

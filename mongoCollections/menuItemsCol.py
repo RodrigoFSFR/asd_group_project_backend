@@ -2,10 +2,10 @@ from .common import db, getNextId
 from flask import Blueprint, request, jsonify
 
 # defines the collection for inventory items
-menuItemsCol = db["InventoryItems"]
+menuItemsCol = db["menuItems"]
 
 # creates a blueprint to store the routes
-menuItemsBp = Blueprint("inventoryItems", __name__)
+menuItemsBp = Blueprint("menuItems", __name__)
 
 
 @menuItemsBp.route("/add-menu-item", methods=["POST"])

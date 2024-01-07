@@ -13,7 +13,7 @@ from mongoCollections import (
     reservationsCol,
     staffCol,
     ordersCol,
-    menuItemsCol
+    menuItemsCol,
 )
 
 server = Flask(__name__)
