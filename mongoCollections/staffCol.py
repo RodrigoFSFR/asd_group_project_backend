@@ -98,11 +98,8 @@ def login():
     if staff:
         storedPassword = staff["password"]
 
-        # hashes the input password with the same method as the one stored in the database
-        hashedPassword = bcrypt.hashpw(password.encode("utf-8"), storedPassword)
-
         # compares the passwords using the built-in bcrypt.checkpw method
-        if bcrypt.checkpw(hashedPassword, storedPassword):
+        if bcrypt.checkpw(password.encode("utf-8"), storedPassword):
             print(f"Authenticated staff member with ID:{staffId}")
             return "True", 200
 
