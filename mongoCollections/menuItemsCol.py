@@ -58,7 +58,7 @@ def deleteItem():
 
 @menuItemsBp.route("/change-menu-item", methods=["POST"])
 # changes the amount of an item
-def changeItemAmount():
+def changeItem():
     data = request.json
     itemId = data.get("itemId")
     name = data.get("name")
