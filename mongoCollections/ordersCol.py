@@ -97,3 +97,17 @@ def getAllOrders():
     else:
         print("Could not retrieve the list of orders")
         return "False", 500
+
+
+@ordersBp.route("/get-order", methods=["get"])
+# fetches a specific order
+def getOrder():
+    data = request.json
+    orderId = data.get("orderId")
+    order = ordersCol.find_one({"orderId": orderId}, {"_id": 0})
+
+    if order:
+        return jsonify(order), 200
+    else:
+        print(f"Could not retrieve order with ID: {orderId}")
+        return "False", 500
